@@ -4,9 +4,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-# Función de costo f(x, y) = 3*(x^2) + 2*(y^2) + 80
+
 def funcion_costo(x, y):
-    return 3*(x**2) + 2*(y**2) + 80
+    return 3*(x**2) + 2*(y**2) + 80 #Sacada de https://totumat.com/2020/04/13/optimizacion-con-restricciones/
 
 # Gráfica 3D de la función de costo con restricción x + y = 30
 def graficar_region_factible(c=30):
