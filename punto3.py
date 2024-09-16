@@ -26,10 +26,14 @@ def seleccionar_funcion(opcion):
 def expansion_taylor(funcion, punto, terminos):
     x = sp.symbols('x')
     taylor = 0
-    for n in range(terminos):
+    n = 0
+    while not n > terminos:
         derivada = sp.diff(funcion, x, n)
-        termino_taylor = (derivada.subs(x, punto)) * ((x - punto) ** n) / sp.factorial(n)
+        derivada_x0 = derivada.subs(x, punto)
+        divisor = sp.factorial(n)
+        termino_taylor = (derivada_x0/divisor) * (x-punto)**n
         taylor += termino_taylor
+        n += 1
     return taylor
 
 # Función para graficar la función original y la serie de Taylor
