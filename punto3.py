@@ -37,7 +37,7 @@ def expansion_taylor(funcion, punto, terminos):
     return taylor
 
 # Función para graficar la función original y la serie de Taylor
-def graficar(funcion, taylor_aprox, punto, rango, terminos, nombre_funcion):
+def graficar(funcion, taylor_aprox, punto, rango, terminos, nombre_funcion, expresion_taylor_latex):
     x = np.linspace(rango[0], rango[1], 400)
 
     fun_lambd = sp.lambdify(sp.symbols('x'), funcion, "numpy")
@@ -46,9 +46,12 @@ def graficar(funcion, taylor_aprox, punto, rango, terminos, nombre_funcion):
     y_fun = fun_lambd(x)
     y_taylor = taylor_lambd(x)
 
+    plt.figure(figsize=(8, 6))
+
     plt.plot(x, y_fun, label="Función original", color="blue")
     plt.plot(x, y_taylor, label=f"Serie de Taylor ({terminos} términos)", linestyle="dashed", color="red")
     plt.scatter(punto, fun_lambd(punto), color="black", marker="o", label=f"Expansión en x={punto}")
+    plt.text(0.05, 0.85, f"Polinomio de Taylor: ${expresion_taylor_latex}$", fontsize=10, transform=plt.gca().transAxes, bbox=dict(facecolor='white', alpha=0.5))    
     plt.title(f"Aproximación de Taylor para {nombre_funcion}")
     plt.legend()
     plt.grid(True)
@@ -74,9 +77,11 @@ def calcular_taylor():
     # Calcular la serie de Taylor
     taylor_aprox = expansion_taylor(funcion, punto, terminos)
 
+    expresion_taylor_latex = sp.latex(taylor_aprox)
+
     # Graficar la función y la aproximación de Taylor
     rango = [-8, 8]
-    graficar(funcion, taylor_aprox, punto, rango, terminos, nombre_funcion)
+    graficar(funcion, taylor_aprox, punto, rango, terminos, nombre_funcion, expresion_taylor_latex)
 
 # Función principal que crea la ventana de Tkinter
 def ventana_opcion3():
