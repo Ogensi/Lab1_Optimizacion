@@ -1,0 +1,22 @@
+import tkinter as tk
+from punto1 import ventana_opcion1
+from punto2 import ventana_opcion2
+from punto3 import ventana_opcion3
+from punto4 import ventana_opcion4
+
+# Función principal para crear el menú con las diferentes opciones
+def main():
+    root = tk.Tk()
+    root.title("Menú de Optimización y Matemáticas")
+    
+    # Botones para seleccionar las opciones del menú
+    tk.Button(root, text="PUNTO 1: Optimización de Dos Variables", command=ventana_opcion1).pack(pady=10)
+    tk.Button(root, text="PUNTO 2: Representación de Matrices Sparse", command=ventana_opcion2).pack(pady=10)
+    tk.Button(root, text="PUNTO 3:.Expansión en Series de Taylor", command=ventana_opcion3).pack(pady=10)
+    tk.Button(root, text="PUNTO 4: Algoritmos de Optimización Sin Restricciones", command=ventana_opcion4).pack(pady=10)
+    
+    # Iniciar la ventana principal
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
