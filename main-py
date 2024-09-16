@@ -4,17 +4,34 @@ from punto2 import ventana_opcion2
 from punto3 import ventana_opcion3
 from punto4 import ventana_opcion4
 
+# Función para centrar la ventana en la pantalla
+def centrar_ventana(ventana, ancho, alto):
+    pantalla_ancho = ventana.winfo_screenwidth()
+    pantalla_alto = ventana.winfo_screenheight()
+    x = (pantalla_ancho // 2) - (ancho // 2)
+    y = (pantalla_alto // 2) - (alto // 2)
+    ventana.geometry(f"{ancho}x{alto}+{x}+{y}")
+
 # Función principal para crear el menú con las diferentes opciones
 def main():
     root = tk.Tk()
     root.title("Menú de Optimización y Matemáticas")
+
+    # Dimensiones de la ventana
+    ancho_ventana = 400
+    alto_ventana = 300
+    centrar_ventana(root, ancho_ventana, alto_ventana)
     
-    # Botones para seleccionar las opciones del menú
-    tk.Button(root, text="PUNTO 1: Optimización de Dos Variables", command=ventana_opcion1).pack(pady=10)
-    tk.Button(root, text="PUNTO 2: Representación de Matrices Sparse", command=ventana_opcion2).pack(pady=10)
-    tk.Button(root, text="PUNTO 3:.Expansión en Series de Taylor", command=ventana_opcion3).pack(pady=10)
-    tk.Button(root, text="PUNTO 4: Algoritmos de Optimización Sin Restricciones", command=ventana_opcion4).pack(pady=10)
-    
+    # Crear un marco para añadir margen alrededor de los botones
+    frame = tk.Frame(root, padx=20, pady=20)
+    frame.pack(expand=True)
+
+    # Botones para seleccionar las opciones del menú con márgenes
+    tk.Button(frame, text="PUNTO 1: Optimización de Dos Variables", command=ventana_opcion1).pack(pady=10)
+    tk.Button(frame, text="PUNTO 2: Representación de Matrices Sparse", command=ventana_opcion2).pack(pady=10)
+    tk.Button(frame, text="PUNTO 3: Expansión en Series de Taylor", command=ventana_opcion3).pack(pady=10)
+    tk.Button(frame, text="PUNTO 4: Algoritmos de Optimización Sin Restricciones", command=ventana_opcion4).pack(pady=10)
+
     # Iniciar la ventana principal
     root.mainloop()
 

@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-
+   
 def funcion_costo(x, y):
     return 3*(x**2) + 2*(y**2) + 80 #Sacada de https://totumat.com/2020/04/13/optimizacion-con-restricciones/
 
