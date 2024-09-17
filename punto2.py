@@ -25,12 +25,6 @@ class SparseMatrixCSR:
                     col_indices.append(j)
         return SparseMatrixCSR(data, row_indices, col_indices, dense_matrix.shape)
 
-    def to_dense(self):
-        dense_matrix = np.zeros(self.shape)
-        for data, row, col in zip(self.data, self.row_indices, self.col_indices):
-            dense_matrix[row, col] = data
-        return dense_matrix
-
     def multiply(self, other):
         result = np.zeros(self.shape)
         for i, j, v in zip(self.row_indices, self.col_indices, self.data):
@@ -38,26 +32,37 @@ class SparseMatrixCSR:
                 result[i, k] += v * other[j, k]
         return result
 
-# Generar una matriz dispersa 30x30
-def generar_matriz_sparse(size=30, density=0.1):
+# Generar una matriz dispersa más grande, 300x300
+def generar_matriz_sparse(size=300, density=0.1):
     dense_matrix = np.random.choice([0, 1], size=(size, size), p=[1-density, density])
     return dense_matrix
 
 # Función para medir tiempos y realizar comparación
-def comparar_multiplicacion(matriz_a, matriz_b):
+def comparar_multiplicacion(matriz_a, matriz_b, iteraciones=10):
     # Implementación de CSR desde cero
-    inicio_manual = time.time_ns()
-    matriz_sparse_manual = SparseMatrixCSR.from_dense(matriz_a)
-    resultado_manual = matriz_sparse_manual.multiply(matriz_b)
-    tiempo_manual = time.time_ns() - inicio_manual
+    tiempos_manual = []
+    tiempos_scipy = []
 
-    # Implementación con scipy.sparse
-    inicio_scipy = time.time_ns()
-    matriz_sparse_scipy = csr_matrix(matriz_a)
-    resultado_scipy = matriz_sparse_scipy.dot(matriz_b)
-    tiempo_scipy = time.time_ns() - inicio_scipy
+    for _ in range(iteraciones):
+        # Medir tiempo para implementación manual
+        inicio_manual = time.time_ns()
+        matriz_sparse_manual = SparseMatrixCSR.from_dense(matriz_a)
+        resultado_manual = matriz_sparse_manual.multiply(matriz_b)
+        tiempo_manual = time.time_ns() - inicio_manual
+        tiempos_manual.append(tiempo_manual)
 
-    return tiempo_manual, tiempo_scipy, resultado_manual, resultado_scipy
+        # Medir tiempo para scipy.sparse
+        inicio_scipy = time.time_ns()
+        matriz_sparse_scipy = csr_matrix(matriz_a)
+        resultado_scipy = matriz_sparse_scipy.dot(matriz_b)
+        tiempo_scipy = time.time_ns() - inicio_scipy
+        tiempos_scipy.append(tiempo_scipy)
+
+    # Promediar los tiempos de ejecución
+    tiempo_manual_prom = sum(tiempos_manual) / len(tiempos_manual)
+    tiempo_scipy_prom = sum(tiempos_scipy) / len(tiempos_scipy)
+
+    return tiempo_manual_prom, tiempo_scipy_prom, resultado_manual, resultado_scipy
 
 # Mostrar tabla de comparación en la interfaz
 def mostrar_resultado(matriz_a, matriz_b):
@@ -71,7 +76,7 @@ def mostrar_resultado(matriz_a, matriz_b):
     tk.Label(window_result, text="Método de representación: CSR (Compressed Sparse Row)").pack()
 
     # Tabla de resultados
-    cols = ('Método', 'Tiempo (ns)')
+    cols = ('Método', 'Tiempo Promedio (ns)')
     table = ttk.Treeview(window_result, columns=cols, show='headings')
     
     for col in cols:
@@ -88,22 +93,17 @@ def ventana_opcion2():
     window = tk.Toplevel()
     window.title("Representación de Matriz Sparse")
 
-    # Crear matrices sparse de 30x30
-    matriz_a = generar_matriz_sparse(30)
-    matriz_b = generar_matriz_sparse(30)
+    # Crear matrices sparse más grandes, 300x300
+    matriz_a = generar_matriz_sparse(300)
+    matriz_b = generar_matriz_sparse(300)
 
     # Botón para realizar la comparación
     tk.Button(window, text="Comparar tiempos de ejecución", 
               command=lambda: mostrar_resultado(matriz_a, matriz_b)).pack(pady=10)
 
-    # Mostrar las matrices generadas en la interfaz
-    tk.Label(window, text="Matriz A (30x30):").pack()
-    matriz_a_str = '\n'.join([' '.join(map(str, row)) for row in matriz_a])
-    tk.Label(window, text=matriz_a_str).pack()
-
-    tk.Label(window, text="Matriz B (30x30):").pack()
-    matriz_b_str = '\n'.join([' '.join(map(str, row)) for row in matriz_b])
-    tk.Label(window, text=matriz_b_str).pack()
+    # Mostrar las matrices generadas en la interfaz (solo un resumen para matrices grandes)
+    tk.Label(window, text="Matriz A (300x300) generada.").pack()
+    tk.Label(window, text="Matriz B (300x300) generada.").pack()
 
 if __name__ == "__main__":
     root = tk.Tk()
